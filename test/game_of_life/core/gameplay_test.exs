@@ -2,6 +2,13 @@ defmodule GameOfLife.Core.GameplayTest do
   use ExUnit.Case
   alias GameOfLife.Core.{Board, Gameplay}
 
+  describe "start/1" do
+    test "creates board with initial random population" do
+      assert %Gameplay{tick_number: 0, board: %Board{size: 5, content: _content}} =
+               Gameplay.start(5)
+    end
+  end
+
   describe "process_tick/1" do
     test "changes board content every tick" do
       blinker_1 = %Board{

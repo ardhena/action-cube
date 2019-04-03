@@ -4,10 +4,7 @@ defmodule GameOfLife.Core.Gameplay do
   defstruct [:board, :tick_number]
 
   def start(board_size) do
-    board_size
-    |> Board.new()
-
-    # |> Board.randomly_populate()
+    %__MODULE__{board: board_size |> Board.new() |> Board.randomly_populate(), tick_number: 0}
   end
 
   def process_tick(%__MODULE__{board: board, tick_number: tick_number} = gameplay) do
