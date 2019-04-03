@@ -1,6 +1,8 @@
 defmodule GameOfLifeWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :game_of_life
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", GameOfLifeWeb.UserSocket,
     websocket: true,
     longpoll: false
