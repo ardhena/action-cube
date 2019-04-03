@@ -16,12 +16,5 @@ defmodule GameOfLifeWeb.Router do
 
   scope "/", GameOfLifeWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", GameOfLifeWeb do
-  #   pipe_through :api
-  # end
 end

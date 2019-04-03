@@ -3,10 +3,6 @@ defmodule GameOfLifeWeb.Endpoint do
 
   socket "/live", Phoenix.LiveView.Socket
 
-  socket "/socket", GameOfLifeWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
