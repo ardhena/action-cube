@@ -365,4 +365,50 @@ defmodule GameOfLife.Core.BoardTest do
       assert :dead = Board.process_cell(:dead, 8)
     end
   end
+
+  describe "toggle_cell/2" do
+    test "toggles cell value" do
+      board = %Board{
+        size: 2,
+        content: %{
+          0 => %{
+            0 => :dead,
+            1 => :dead
+          },
+          1 => %{
+            0 => :dead,
+            1 => :dead
+          }
+        }
+      }
+
+      assert %Board{
+               size: 2,
+               content: %{
+                 0 => %{
+                   0 => :dead,
+                   1 => :alive
+                 },
+                 1 => %{
+                   0 => :dead,
+                   1 => :dead
+                 }
+               }
+             } = Board.toggle_cell(board, {0, 1})
+
+      assert %Board{
+               size: 2,
+               content: %{
+                 0 => %{
+                   0 => :dead,
+                   1 => :dead
+                 },
+                 1 => %{
+                   0 => :alive,
+                   1 => :dead
+                 }
+               }
+             } = Board.toggle_cell(board, {1, 0})
+    end
+  end
 end

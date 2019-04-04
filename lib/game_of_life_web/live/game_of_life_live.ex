@@ -22,6 +22,16 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
 
         <h4>Cell size: <%= @settings.cell_size %></h4>
         <input type="range" min="1" max="50" value="<%= @settings.cell_size %>" name="cell_size"/>
+
+        <h4>Initial pattern: <%= @settings.init_pattern %></h4>
+        <select name="init_pattern">
+          <%= @init_pattern_options |> Enum.map(fn option -> %>
+            <option value="<%= option %>" <%= if option == @settings.init_pattern, do: "selected" %>><%= option %></option>
+          <% end) %>
+        </select>
+
+        <h4>Speed: <%= @settings.speed / 10%> seconds per tick</h4>
+        <input type="range" min="1" max="20" value="<%= @settings.speed %>" name="speed"/>
       </form>
     </div>
 
@@ -44,19 +54,33 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
   end
 
   def mount(_session, socket) do
-    if connected?(socket), do: :timer.send_interval(1000, self(), :tick)
+    if connected?(socket), do: :timer.send_interval(100, self(), :tick)
 
     {:ok,
      socket
-     |> assign(gameplay: Gameplay.start(40))
-     |> assign(settings: %{map_size: 40, cell_size: 10})
+     |> assign(gameplay: Gameplay.start(50, "acorn"))
+     |> assign(settings: %{map_size: 50, cell_size: 9, init_pattern: "acorn", speed: 10})
+     |> assign(
+       init_pattern_options: [
+         "clear",
+         "random_1",
+         "random_2",
+         "random_3",
+         "r_pentomino",
+         "diehard",
+         "acorn"
+       ]
+     )
      |> assign(gameplay_running: true)}
   end
 
   def handle_info(:tick, socket) do
     case socket.assigns.gameplay_running do
       true ->
-        {:noreply, assign(socket, gameplay: Gameplay.process_tick(socket.assigns.gameplay))}
+        {:noreply,
+         assign(socket,
+           gameplay: Gameplay.process_tick(socket.assigns.gameplay, socket.assigns.settings.speed)
+         )}
 
       false ->
         {:noreply, socket}
@@ -77,15 +101,24 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
   def handle_event("apply_settings", new_settings, socket) do
     new_map_size = String.to_integer(new_settings["map_size"])
     new_cell_size = String.to_integer(new_settings["cell_size"])
-    new_settings = %{map_size: new_map_size, cell_size: new_cell_size}
+    new_speed = String.to_integer(new_settings["speed"])
+    new_init_pattern = new_settings["init_pattern"] || socket.assigns.settings.init_pattern
 
-    if socket.assigns.settings.map_size == new_settings.map_size do
-      {:noreply, assign(socket, settings: new_settings)}
-    else
+    new_settings = %{
+      map_size: new_map_size,
+      cell_size: new_cell_size,
+      init_pattern: new_init_pattern,
+      speed: new_speed
+    }
+
+    if socket.assigns.settings.map_size != new_map_size ||
+         socket.assigns.settings.init_pattern != new_init_pattern do
       {:noreply,
        socket
-       |> assign(gameplay: Gameplay.start(new_settings.map_size))
+       |> assign(gameplay: Gameplay.start(new_map_size, new_init_pattern))
        |> assign(settings: new_settings)}
+    else
+      {:noreply, assign(socket, settings: new_settings)}
     end
   end
 
