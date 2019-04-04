@@ -8,10 +8,10 @@ defmodule GameOfLife.Core.Board do
     %__MODULE__{size: size, content: array}
   end
 
-  def randomly_populate(%__MODULE__{size: size, content: content} = board) do
+  def randomly_populate(%__MODULE__{size: size} = board) do
     starting_living_cells = Enum.random(floor(size * size / 2)..(size * size - size))
 
-    Enum.reduce(1..starting_living_cells, board, fn i, updated_board ->
+    Enum.reduce(1..starting_living_cells, board, fn _i, updated_board ->
       col = Enum.random(0..(size - 1))
       row = Enum.random(0..(size - 1))
 
@@ -45,6 +45,17 @@ defmodule GameOfLife.Core.Board do
 
     %{board | content: next_board}
   end
+
+  def toggle_cell(%__MODULE__{content: content} = board, {col, row}) do
+    %{
+      board
+      | content:
+          Map.put(content, col, Map.put(content[col], row, toggle_value(content[col][row])))
+    }
+  end
+
+  defp toggle_value(:dead), do: :alive
+  defp toggle_value(:alive), do: :dead
 
   defp get_alive_neighbours(content, i, j) do
     [

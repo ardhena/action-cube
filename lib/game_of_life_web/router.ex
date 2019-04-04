@@ -16,5 +16,7 @@ defmodule GameOfLifeWeb.Router do
 
   scope "/", GameOfLifeWeb do
     pipe_through :browser
+
+    live "/", GameOfLifeLive
   end
 end
