@@ -40,7 +40,9 @@ defmodule GameOfLife.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
-      {:distillery, "~> 2.0"}
+      {:distillery,
+       git: "https://github.com/ardhena/distillery.git",
+       branch: "fix-loading-pidfile-config-from-vm-args"}
     ]
   end
 end
