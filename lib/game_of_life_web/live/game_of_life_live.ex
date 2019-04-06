@@ -37,13 +37,14 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
 
     <div class="game-of-life-right">
       <table class="game-of-life">
-        <%= @gameplay.board.content |> to_ordered_list() |> Enum.map(fn {i, row} -> %>
+        <%= 0..(@gameplay.board.size-1) |> Enum.map(fn i -> %>
           <tr>
-            <%= row |> to_ordered_list |> Enum.map(fn {j, cell} -> %>
-              <td class="<%= cell %>"
+            <%= 0..(@gameplay.board.size-1) |> Enum.map(fn j -> %>
+              <td class="<%= @gameplay.board.content[i][j] %>"
                   style="width: <%= @settings.cell_size %>px; height: <%= @settings.cell_size %>px"
                   phx-click="toggle_cell_state"
                   phx-value="<%= "#{i}-#{j}" %>"
+                  id="<%= "#{i}-#{j}" %>"
               ></td>
             <% end) %>
           </tr>
@@ -120,11 +121,5 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
     else
       {:noreply, assign(socket, settings: new_settings)}
     end
-  end
-
-  defp to_ordered_list(map) do
-    map
-    |> Enum.to_list()
-    |> Enum.sort(fn {key1, _}, {key2, _} -> key1 < key2 end)
   end
 end

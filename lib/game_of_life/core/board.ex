@@ -146,7 +146,7 @@ defmodule GameOfLife.Core.Board do
             new_cell =
               process_cell(
                 cell,
-                content |> get_alive_neighbours(i, j) |> length()
+                count_alive_neighbours(content, i, j)
               )
 
             Map.put(row, j, new_cell)
@@ -157,19 +157,20 @@ defmodule GameOfLife.Core.Board do
     %{board | content: next_board}
   end
 
-  defp get_alive_neighbours(content, i, j) do
-    [
-      content[i - 1][j - 1],
-      content[i - 1][j],
-      content[i - 1][j + 1],
-      content[i][j - 1],
-      content[i][j + 1],
-      content[i + 1][j - 1],
-      content[i + 1][j],
-      content[i + 1][j + 1]
-    ]
-    |> Enum.filter(&(&1 == :alive))
+  defp count_alive_neighbours(content, i, j) do
+    0
+    |> maybe_increment_counter(content[i - 1][j - 1])
+    |> maybe_increment_counter(content[i - 1][j])
+    |> maybe_increment_counter(content[i - 1][j + 1])
+    |> maybe_increment_counter(content[i][j - 1])
+    |> maybe_increment_counter(content[i][j + 1])
+    |> maybe_increment_counter(content[i + 1][j - 1])
+    |> maybe_increment_counter(content[i + 1][j])
+    |> maybe_increment_counter(content[i + 1][j + 1])
   end
+
+  defp maybe_increment_counter(counter, :alive), do: counter + 1
+  defp maybe_increment_counter(counter, _), do: counter
 
   @doc """
   Computes state of cell in the next generation based on the number of alive neighbours.
