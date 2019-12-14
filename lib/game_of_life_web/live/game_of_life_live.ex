@@ -60,7 +60,7 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
     {:ok,
      socket
      |> assign(gameplay: Gameplay.start(50, "acorn"))
-     |> assign(settings: %{map_size: 50, cell_size: 9, init_pattern: "acorn", speed: 10})
+     |> assign(settings: %{map_size: 25, cell_size: 9, init_pattern: "acorn", speed: 10})
      |> assign(
        init_pattern_options: [
          "clear",
