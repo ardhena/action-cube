@@ -43,7 +43,7 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
               <td class="<%= @gameplay.board.content[i][j] %>"
                   style="width: <%= @settings.cell_size %>px; height: <%= @settings.cell_size %>px"
                   phx-click="toggle_cell_state"
-                  phx-value="<%= "#{i}-#{j}" %>"
+                  phx-value-*="<%= "#{i}-#{j}" %>"
                   id="<%= "#{i}-#{j}" %>"
               ></td>
             <% end) %>
@@ -54,7 +54,7 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
     """
   end
 
-  def mount(_session, socket) do
+  def mount(_params, _session, socket) do
     if connected?(socket), do: :timer.send_interval(100, self(), :tick)
 
     {:ok,
@@ -88,7 +88,7 @@ defmodule GameOfLifeWeb.GameOfLifeLive do
     end
   end
 
-  def handle_event("toggle_cell_state", value, socket) do
+  def handle_event("toggle_cell_state", %{"*" => value}, socket) do
     [col, row] = value |> String.split("-") |> Enum.map(&String.to_integer(&1))
 
     {:noreply,

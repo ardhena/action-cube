@@ -1,7 +1,13 @@
 defmodule GameOfLifeWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :game_of_life
 
-  socket "/live", Phoenix.LiveView.Socket
+  @session_options [
+    store: :cookie,
+    key: "_game_of_life_key",
+    signing_salt: "ObZxWE4g"
+  ]
+
+  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -35,10 +41,7 @@ defmodule GameOfLifeWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  plug Plug.Session,
-    store: :cookie,
-    key: "_game_of_life_key",
-    signing_salt: "ObZxWE4g"
+  plug Plug.Session, @session_options
 
   plug GameOfLifeWeb.Router
 end

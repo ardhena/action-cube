@@ -39,7 +39,7 @@ defmodule GameOfLife.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.4.0"},
+      {:phoenix_live_view, "~> 0.14.0"},
       {:floki, ">= 0.0.0", only: :test},
       {:distillery,
        git: "https://github.com/ardhena/distillery.git",
