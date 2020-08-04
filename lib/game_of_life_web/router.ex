@@ -1,5 +1,6 @@
 defmodule GameOfLifeWeb.Router do
   use GameOfLifeWeb, :router
+  import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,5 +19,6 @@ defmodule GameOfLifeWeb.Router do
     pipe_through :browser
 
     live "/", GameOfLifeLive
+    live_dashboard "/dashboard"
   end
 end
