@@ -4,7 +4,7 @@ config :game_of_life, GameOfLifeWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "Z9nTGzcv94Xigr4mclk2bugUzdfOTsvBVsFx8zczbFVPcV9hIh59cLgyE7oEldbX",
   render_errors: [view: GameOfLifeWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: GameOfLife.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: GameOfLife.PubSub,
   live_view: [signing_salt: "ixz/VHENhl4TOIw6NMmnvX5qwdvH2p4K"]
 
 config :logger, :console,

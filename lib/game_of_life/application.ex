@@ -8,6 +8,8 @@ defmodule GameOfLife.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      # Start the PubSub system
+      {Phoenix.PubSub, name: GameOfLife.PubSub},
       # Start the endpoint when the application starts
       GameOfLifeWeb.Endpoint
       # Starts a worker by calling: GameOfLife.Worker.start_link(arg)
