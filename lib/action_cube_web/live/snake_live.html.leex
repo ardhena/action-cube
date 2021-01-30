@@ -1,0 +1,19 @@
+<h1>Snake</h1>
+
+<div class="snake-content" phx-window-keyup="change_direction">
+  <div class="sidebar">
+    <p>Game is <%= if @game_running, do: "running", else: "over" %></p>
+  </div>
+
+  <div class="board">
+    <table>
+      <%= 0..(@board.size-1) |> Enum.map(fn i -> %>
+        <tr>
+          <%= 0..(@board.size-1) |> Enum.map(fn j -> %>
+            <td class="<%= @board.content[i][j] %>" id="<%= "#{i}-#{j}" %>"></td>
+          <% end) %>
+        </tr>
+      <% end) %>
+    </table>
+  </div>
+</div>

@@ -31,3 +31,19 @@
     background-color: $green;
   }
 }
+
+.snake-content {
+  display: flex;
+  justify-content: space-around;
+  width: calc(100% - 40px);
+  padding: 0 20px;
+
+  .sidebar { width: 15%; }
+  .board { width: 85%; }
+
+  table {  margin: auto; border-collapse: collapse; border-spacing: 0px; }
+  td { width: 20px; height: 20px; }
+  td.empty, td.empty-blink { background-color: $green; border: 1px solid $pink; }
+  td.snake { background-color: $pink-light; border: 1px solid $pink; }
+  td.snake-blink { background-color: $green-light; border: 1px solid $pink; }
+}

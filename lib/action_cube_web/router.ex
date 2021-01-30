@@ -20,6 +20,7 @@ defmodule ActionCubeWeb.Router do
 
     live "/", HomeLive
     live "/game_of_life", GameOfLifeLive
+    live "/snake", SnakeLive
     live_dashboard "/dashboard"
   end
 end

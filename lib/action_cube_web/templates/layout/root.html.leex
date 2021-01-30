@@ -12,7 +12,7 @@
   <body>
     <div class="navbar">
       <div class="title">
-        <%= link "Action Cube", to: "" %>
+        <%= live_patch "Action Cube", to: Routes.live_path(@conn, ActionCubeWeb.HomeLive) %>
       </div>
     </div>
     <div class="content">
