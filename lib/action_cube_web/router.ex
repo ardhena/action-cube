@@ -18,7 +18,8 @@ defmodule ActionCubeWeb.Router do
   scope "/", ActionCubeWeb do
     pipe_through :browser
 
-    live "/", GameOfLifeLive
+    live "/", HomeLive
+    live "/game_of_life", GameOfLifeLive
     live_dashboard "/dashboard"
   end
 end

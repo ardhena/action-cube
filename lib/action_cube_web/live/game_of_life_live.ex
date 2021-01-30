@@ -1,5 +1,5 @@
 defmodule ActionCubeWeb.GameOfLifeLive do
-  use Phoenix.LiveView
+  use ActionCubeWeb, :live_view
   alias ActionCube.GameOfLife.Gameplay
 
   @init_map_size 40
