@@ -1,0 +1,33 @@
+@import 'variables';
+@import 'base';
+@import 'navigation_and_footer';
+
+.game-of-life-content {
+  display: flex;
+  justify-content: space-around;
+  width: calc(100% - 40px);
+  padding: 0 20px;
+
+  .sidebar { width: 15%; }
+  .board { width: 85%; table { margin: auto; }}
+
+  td { cursor: pointer; }
+  td.dead { background-color: $grey-light; border: 1px solid $grey-light; }
+  td.alive { background-color: $green-light; border: 1px solid $green; }
+}
+
+.btn {
+  text-decoration: none;
+  color: $green;
+  border: 1px solid $green;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: $green-light;
+  cursor: pointer;
+  font-size: $font-size;
+
+  &:hover {
+    color: $grey-light;
+    background-color: $green;
+  }
+}

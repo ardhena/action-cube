@@ -1,47 +1,57 @@
-<div class="game-of-life-left">
-  <h3>Generation: <%= @gameplay.tick_number %></h3>
+<h1>Game of life</h1>
 
-  <br/>
-  <br/>
+<div class="game-of-life-content">
+  <div class="sidebar">
+    <h3>Generation: <%= @gameplay.tick_number %></h3>
 
-  <button phx-click="toggle_gameplay">Toggle gameplay</button><br/>
-  <p>Game is <%= if @gameplay_running, do: "running", else: "stopped" %></p>
+    <br>
 
-  <br/>
-  <br/>
+    <button phx-click="toggle_gameplay" class="btn">Toggle gameplay</button><br/>
+    <p>Game is <%= if @gameplay_running, do: "running", else: "stopped" %></p>
 
-  <form phx-change="apply_settings">
-    <h4>Map size: <%= @settings.map_size %></h4>
-    <input type="range" min="10" max="100" value="<%= @settings.map_size %>" name="map_size"/>
+    <br>
 
-    <h4>Cell size: <%= @settings.cell_size %></h4>
-    <input type="range" min="1" max="50" value="<%= @settings.cell_size %>" name="cell_size"/>
+    <form phx-change="apply_settings">
+      <p>
+        <p>Initial pattern:</p>
+        <select name="init_pattern">
+          <%= @init_pattern_options |> Enum.map(fn option -> %>
+          <option value="<%= option %>" <%= if option == @settings.init_pattern, do: "selected" %>><%= option %></option>
+          <% end) %>
+        </select>
+      </p>
 
-    <h4>Initial pattern: <%= @settings.init_pattern %></h4>
-    <select name="init_pattern">
-      <%= @init_pattern_options |> Enum.map(fn option -> %>
-        <option value="<%= option %>" <%= if option == @settings.init_pattern, do: "selected" %>><%= option %></option>
+      <p>
+        <p>Map size: <%= @settings.map_size %></p>
+        <input type="range" min="10" max="60" value="<%= @settings.map_size %>" name="map_size"/>
+      </p>
+
+      <p>
+        <p>Cell size: <%= @settings.cell_size %></p>
+        <input type="range" min="1" max="40" value="<%= @settings.cell_size %>" name="cell_size"/>
+      </p>
+
+      <p>
+        <p>Speed: <%= @settings.speed / 10 %> seconds/tick</p>
+        <input type="range" min="1" max="20" value="<%= @settings.speed %>" name="speed"/>
+      </p>
+    </form>
+  </div>
+
+  <div class="board">
+    <table>
+      <%= 0..(@gameplay.board.size-1) |> Enum.map(fn i -> %>
+        <tr>
+          <%= 0..(@gameplay.board.size-1) |> Enum.map(fn j -> %>
+            <td class="<%= @gameplay.board.content[i][j] %>"
+                style="width: <%= @settings.cell_size %>px; height: <%= @settings.cell_size %>px"
+                phx-click="toggle_cell_state"
+                phx-value-*="<%= "#{i}-#{j}" %>"
+                id="<%= "#{i}-#{j}" %>"
+            ></td>
+          <% end) %>
+        </tr>
       <% end) %>
-    </select>
-
-    <h4>Speed: <%= @settings.speed / 10%> seconds per tick</h4>
-    <input type="range" min="1" max="20" value="<%= @settings.speed %>" name="speed"/>
-  </form>
-</div>
-
-<div class="game-of-life-right">
-  <table class="game-of-life">
-    <%= 0..(@gameplay.board.size-1) |> Enum.map(fn i -> %>
-      <tr>
-        <%= 0..(@gameplay.board.size-1) |> Enum.map(fn j -> %>
-          <td class="<%= @gameplay.board.content[i][j] %>"
-              style="width: <%= @settings.cell_size %>px; height: <%= @settings.cell_size %>px"
-              phx-click="toggle_cell_state"
-              phx-value-*="<%= "#{i}-#{j}" %>"
-              id="<%= "#{i}-#{j}" %>"
-          ></td>
-        <% end) %>
-      </tr>
-    <% end) %>
-  </table>
+    </table>
+  </div>
 </div>

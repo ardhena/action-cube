@@ -1,0 +1,28 @@
+.navbar {
+  border-bottom: 1px $green solid;
+  background-color: $green-light;
+  padding: 0;
+  display: inline-flex;
+  width: 100vw;
+
+  .title {
+    font-weight: 600;
+    padding: 20px 20px;
+    color: $green;
+    cursor: pointer;
+
+    a {
+      color: $green;
+      text-decoration: none;
+    }
+  }
+}
+
+.footer {
+  display: inline-flex;
+  justify-content: center;
+  width: 100vw;
+  padding: 10px 0;
+  margin: auto;
+  color: $green-light;
+}

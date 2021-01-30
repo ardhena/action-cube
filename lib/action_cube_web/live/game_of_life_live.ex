@@ -3,7 +3,7 @@ defmodule ActionCubeWeb.GameOfLifeLive do
   alias ActionCube.GameOfLife.Gameplay
 
   @init_map_size 40
-  @init_cell_size 12
+  @init_cell_size 10
   @init_speed 10
 
   def mount(_params, _session, socket) do
@@ -11,6 +11,7 @@ defmodule ActionCubeWeb.GameOfLifeLive do
 
     {:ok,
      socket
+     |> assign(page_title: "Game of life")
      |> assign(gameplay: Gameplay.start(@init_map_size, "acorn"))
      |> assign(
        settings: %{
