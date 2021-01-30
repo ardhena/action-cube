@@ -1,12 +1,12 @@
-defmodule GameOfLifeWeb do
+defmodule ActionCubeWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use GameOfLifeWeb, :controller
-      use GameOfLifeWeb, :view
+      use ActionCubeWeb, :controller
+      use ActionCubeWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,20 +19,20 @@ defmodule GameOfLifeWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: GameOfLifeWeb
+      use Phoenix.Controller, namespace: ActionCubeWeb
 
       import Plug.Conn
-      import GameOfLifeWeb.Gettext
+      import ActionCubeWeb.Gettext
       import Phoenix.LiveView.Controller
-      alias GameOfLifeWeb.Router.Helpers, as: Routes
+      alias ActionCubeWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/game_of_life_web/templates",
-        namespace: GameOfLifeWeb
+        root: "lib/action_cube_web/templates",
+        namespace: ActionCubeWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
@@ -41,9 +41,9 @@ defmodule GameOfLifeWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import GameOfLifeWeb.ErrorHelpers
-      import GameOfLifeWeb.Gettext
-      alias GameOfLifeWeb.Router.Helpers, as: Routes
+      import ActionCubeWeb.ErrorHelpers
+      import ActionCubeWeb.Gettext
+      alias ActionCubeWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -59,7 +59,7 @@ defmodule GameOfLifeWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import GameOfLifeWeb.Gettext
+      import ActionCubeWeb.Gettext
     end
   end
 

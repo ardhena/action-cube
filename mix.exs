@@ -1,9 +1,9 @@
-defmodule GameOfLife.MixProject do
+defmodule ActionCube.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :game_of_life,
+      app: :action_cube,
       version: "0.1.0",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule GameOfLife.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {GameOfLife.Application, []},
+      mod: {ActionCube.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

@@ -1,6 +1,8 @@
-# GameOfLife
+# Action Cube
 
-[Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implemented in Phoenix with LiveView.
+Games using phoenix live view library.
+
+- [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 
 ## Setup
 

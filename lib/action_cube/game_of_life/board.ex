@@ -1,4 +1,4 @@
-defmodule GameOfLife.Core.Board do
+defmodule ActionCube.GameOfLife.Board do
   defstruct [:size, :content]
 
   @doc """

@@ -1,4 +1,4 @@
-defmodule GameOfLifeWeb.ConnCase do
+defmodule ActionCubeWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -20,10 +20,10 @@ defmodule GameOfLifeWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      alias GameOfLifeWeb.Router.Helpers, as: Routes
+      alias ActionCubeWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint GameOfLifeWeb.Endpoint
+      @endpoint ActionCubeWeb.Endpoint
     end
   end
 

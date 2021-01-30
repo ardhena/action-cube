@@ -1,5 +1,5 @@
-defmodule GameOfLife.Core.Gameplay do
-  alias GameOfLife.Core.Board
+defmodule ActionCube.GameOfLife.Gameplay do
+  alias ActionCube.GameOfLife.Board
 
   defstruct [:board, :tick_number, :subtick_number]
 
@@ -22,7 +22,7 @@ defmodule GameOfLife.Core.Gameplay do
           gameplay,
         speed
       )
-      when subtick_number + 1 == speed do
+      when subtick_number + 1 >= speed do
     %{
       gameplay
       | board: Board.next_generation(board),

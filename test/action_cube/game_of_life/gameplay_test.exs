@@ -1,6 +1,6 @@
-defmodule GameOfLife.Core.GameplayTest do
+defmodule ActionCube.GameOfLife.GameplayTest do
   use ExUnit.Case
-  alias GameOfLife.Core.{Board, Gameplay}
+  alias ActionCube.GameOfLife.{Board, Gameplay}
 
   describe "start/1" do
     test "creates board with initial population" do

@@ -1,5 +1,5 @@
-defmodule GameOfLifeWeb.ErrorView do
-  use GameOfLifeWeb, :view
+defmodule ActionCubeWeb.ErrorView do
+  use ActionCubeWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

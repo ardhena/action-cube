@@ -1,10 +1,10 @@
 use Mix.Config
 
-config :game_of_life, GameOfLifeWeb.Endpoint,
+config :action_cube, ActionCubeWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "Z9nTGzcv94Xigr4mclk2bugUzdfOTsvBVsFx8zczbFVPcV9hIh59cLgyE7oEldbX",
-  render_errors: [view: GameOfLifeWeb.ErrorView, accepts: ~w(html json)],
-  pubsub_server: GameOfLife.PubSub,
+  render_errors: [view: ActionCubeWeb.ErrorView, accepts: ~w(html json)],
+  pubsub_server: ActionCube.PubSub,
   live_view: [signing_salt: "ixz/VHENhl4TOIw6NMmnvX5qwdvH2p4K"]
 
 config :logger, :console,

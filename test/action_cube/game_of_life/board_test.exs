@@ -1,6 +1,6 @@
-defmodule GameOfLife.Core.BoardTest do
+defmodule ActionCube.GameOfLife.BoardTest do
   use ExUnit.Case
-  alias GameOfLife.Core.Board
+  alias ActionCube.GameOfLife.Board
 
   describe "new/1" do
     test "creates new board of given size" do

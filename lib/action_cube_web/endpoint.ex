@@ -1,9 +1,9 @@
-defmodule GameOfLifeWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :game_of_life
+defmodule ActionCubeWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :action_cube
 
   @session_options [
     store: :cookie,
-    key: "_game_of_life_key",
+    key: "_action_cube_key",
     signing_salt: "ObZxWE4g"
   ]
 
@@ -15,7 +15,7 @@ defmodule GameOfLifeWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :game_of_life,
+    from: :action_cube,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
@@ -43,5 +43,5 @@ defmodule GameOfLifeWeb.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   plug Plug.Session, @session_options
 
-  plug GameOfLifeWeb.Router
+  plug ActionCubeWeb.Router
 end

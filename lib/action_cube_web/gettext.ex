@@ -1,11 +1,11 @@
-defmodule GameOfLifeWeb.Gettext do
+defmodule ActionCubeWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 
   By using [Gettext](https://hexdocs.pm/gettext),
   your module gains a set of macros for translations, for example:
 
-      import GameOfLifeWeb.Gettext
+      import ActionCubeWeb.Gettext
 
       # Simple translation
       gettext("Here is the string to translate")
@@ -20,5 +20,5 @@ defmodule GameOfLifeWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :game_of_life
+  use Gettext, otp_app: :action_cube
 end

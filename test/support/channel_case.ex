@@ -1,4 +1,4 @@
-defmodule GameOfLifeWeb.ChannelCase do
+defmodule ActionCubeWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,7 +21,7 @@ defmodule GameOfLifeWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint GameOfLifeWeb.Endpoint
+      @endpoint ActionCubeWeb.Endpoint
     end
   end
 

@@ -1,6 +1,6 @@
-defmodule GameOfLife do
+defmodule ActionCube do
   @moduledoc """
-  GameOfLife keeps the contexts that define your domain
+  ActionCube keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless
