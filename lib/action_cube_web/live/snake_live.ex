@@ -3,7 +3,7 @@ defmodule ActionCubeWeb.SnakeLive do
   alias ActionCube.Snake.Board
 
   def mount(_params, _session, socket) do
-    if connected?(socket), do: :timer.send_interval(750, self(), "tick")
+    if connected?(socket), do: :timer.send_interval(500, self(), "tick")
 
     {:ok,
      socket

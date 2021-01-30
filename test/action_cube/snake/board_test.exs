@@ -4,15 +4,25 @@ defmodule ActionCube.Snake.BoardTest do
 
   describe "start/1" do
     test "builds an initial board" do
+      board = Board.start(2)
+
       assert %Board{
                content: %{
-                 0 => %{0 => :empty, 1 => :empty},
-                 1 => %{0 => :empty, 1 => :snake}
+                 0 => %{0 => _, 1 => _},
+                 1 => %{0 => _, 1 => :snake_head}
                },
                size: 2,
                snake_direction: :up,
                snake_head_coords: {1, 1}
-             } = Board.start(2)
+             } = board
+
+      assert :treat =
+               (Map.values(board.content[0]) ++ Map.values(board.content[1]))
+               |> Enum.find(&(&1 == :treat))
+
+      assert [:empty, :empty] =
+               (Map.values(board.content[0]) ++ Map.values(board.content[1]))
+               |> Enum.filter(&(&1 == :empty))
     end
   end
 
@@ -29,12 +39,12 @@ defmodule ActionCube.Snake.BoardTest do
     end
   end
 
-  describe "spawn_snake/0" do
+  describe "spawn_snake/1" do
     test "spawn snakes in the middle if size odd" do
       assert %Board{
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty},
-                 1 => %{0 => :empty, 1 => :snake, 2 => :empty},
+                 1 => %{0 => :empty, 1 => :snake_head, 2 => :empty},
                  2 => %{0 => :empty, 1 => :empty, 2 => :empty}
                },
                size: 3,
@@ -48,13 +58,45 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,
                snake_direction: :up,
                snake_head_coords: {2, 2}
              } = Board.new(4) |> Board.spawn_snake()
+    end
+  end
+
+  describe "spawn_treat/1" do
+    test "spawns treat somewhere" do
+      board = Board.new(2) |> Board.spawn_treat()
+
+      assert :treat =
+               (Map.values(board.content[0]) ++ Map.values(board.content[1]))
+               |> Enum.find(&(&1 == :treat))
+    end
+
+    test "spawns treat somewhere that is not a snake" do
+      assert %Board{
+               content: %{
+                 0 => %{0 => :snake, 1 => :snake_head},
+                 1 => %{0 => :snake, 1 => :treat}
+               },
+               size: 2,
+               snake_direction: :down,
+               snake_head_coords: {1, 0}
+             } =
+               %Board{
+                 content: %{
+                   0 => %{0 => :snake, 1 => :snake_head},
+                   1 => %{0 => :snake, 1 => :empty}
+                 },
+                 size: 2,
+                 snake_direction: :down,
+                 snake_head_coords: {1, 0}
+               }
+               |> Board.spawn_treat()
     end
   end
 
@@ -66,7 +108,7 @@ defmodule ActionCube.Snake.BoardTest do
               %Board{
                 content: %{
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  1 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                  1 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                   2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                 },
@@ -83,7 +125,7 @@ defmodule ActionCube.Snake.BoardTest do
       assert {:stop,
               %Board{
                 content: %{
-                  0 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                  0 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
@@ -103,7 +145,7 @@ defmodule ActionCube.Snake.BoardTest do
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  3 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty}
+                  3 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty}
                 },
                 size: 4,
                 snake_direction: :down,
@@ -124,7 +166,7 @@ defmodule ActionCube.Snake.BoardTest do
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  3 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty}
+                  3 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty}
                 },
                 size: 4,
                 snake_direction: :down,
@@ -140,7 +182,7 @@ defmodule ActionCube.Snake.BoardTest do
                 content: %{
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  2 => %{0 => :empty, 1 => :snake, 2 => :empty, 3 => :empty},
+                  2 => %{0 => :empty, 1 => :snake_head, 2 => :empty, 3 => :empty},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                 },
                 size: 4,
@@ -163,7 +205,7 @@ defmodule ActionCube.Snake.BoardTest do
                 content: %{
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  2 => %{0 => :snake, 1 => :empty, 2 => :empty, 3 => :empty},
+                  2 => %{0 => :snake_head, 1 => :empty, 2 => :empty, 3 => :empty},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                 },
                 size: 4,
@@ -180,7 +222,7 @@ defmodule ActionCube.Snake.BoardTest do
                 content: %{
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :snake},
+                  2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :snake_head},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                 },
                 size: 4,
@@ -201,13 +243,100 @@ defmodule ActionCube.Snake.BoardTest do
                 content: %{
                   0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                   1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                  2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :snake},
+                  2 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :snake_head},
                   3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                 },
                 size: 4,
                 snake_direction: :right,
                 snake_head_coords: {3, 2}
               }} = Board.process_tick(board)
+    end
+
+    test "eats treat, becomes longer and spawns new treat" do
+      board = %Board{
+        content: %{
+          0 => %{0 => :empty, 1 => :snake_head},
+          1 => %{0 => :empty, 1 => :treat}
+        },
+        size: 2,
+        snake_direction: :down,
+        snake_head_coords: {1, 0},
+        snake_coords: [{1, 0}]
+      }
+
+      assert {:ok, board} = board |> Board.process_tick()
+
+      assert %Board{
+               content: %{
+                 0 => %{0 => _, 1 => :snake},
+                 1 => %{0 => _, 1 => :snake_head}
+               },
+               size: 2,
+               snake_direction: :down,
+               snake_head_coords: {1, 1}
+             } = board
+
+      assert :treat =
+               (Map.values(board.content[0]) ++ Map.values(board.content[1]))
+               |> Enum.find(&(&1 == :treat))
+    end
+
+    test "moves with longer snake" do
+      board = %Board{
+        content: %{
+          0 => %{0 => :empty, 1 => :snake_head, 2 => :empty},
+          1 => %{0 => :empty, 1 => :snake, 2 => :snake},
+          2 => %{0 => :empty, 1 => :empty, 2 => :empty},
+        },
+        size: 3,
+        snake_direction: :left,
+        snake_head_coords: {1, 0},
+        snake_coords: [{2, 1}, {1, 1}, {1, 0}]
+      }
+
+      assert {:ok, board} = board |> Board.process_tick()
+
+      assert %Board{
+              content: %{
+                0 => %{0 => :snake_head, 1 => :snake, 2 => :empty},
+                1 => %{0 => :empty, 1 => :snake, 2 => :empty},
+                2 => %{0 => :empty, 1 => :empty, 2 => :empty}
+              },
+              size: 3,
+              snake_direction: :left,
+              snake_head_coords: {0, 0},
+              snake_coords: [{1, 1}, {1, 0}, {0, 0}]
+            } = board
+
+      assert {:ok, board} = board |> Board.change_direction(:down) |> Board.process_tick()
+
+      assert %Board{
+              content: %{
+                0 => %{0 => :snake, 1 => :snake, 2 => :empty},
+                1 => %{0 => :snake_head, 1 => :empty, 2 => :empty},
+                2 => %{0 => :empty, 1 => :empty, 2 => :empty}
+              },
+              size: 3,
+              snake_direction: :down,
+              snake_head_coords: {0, 1},
+              snake_coords: [{1, 0}, {0, 0}, {0, 1}]
+            } = board
+    end
+
+    test "stops the game if snakes eats itself" do
+      board = %Board{
+        content: %{
+          0 => %{0 => :empty, 1 => :snake, 2 => :empty},
+          1 => %{0 => :empty, 1 => :snake, 2 => :snake},
+          2 => %{0 => :empty, 1 => :snake_head, 2 => :snake},
+        },
+        size: 3,
+        snake_direction: :up,
+        snake_head_coords: {1, 2},
+        snake_coords: [{1, 0}, {1, 1}, {2, 1}, {2, 2}, {1, 2}]
+      }
+
+      assert {:stop, ^board} = board |> Board.process_tick()
     end
   end
 
@@ -217,7 +346,7 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,
@@ -235,7 +364,7 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,
@@ -249,7 +378,7 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,
@@ -263,7 +392,7 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,
@@ -277,7 +406,7 @@ defmodule ActionCube.Snake.BoardTest do
                content: %{
                  0 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
                  1 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty},
-                 2 => %{0 => :empty, 1 => :empty, 2 => :snake, 3 => :empty},
+                 2 => %{0 => :empty, 1 => :empty, 2 => :snake_head, 3 => :empty},
                  3 => %{0 => :empty, 1 => :empty, 2 => :empty, 3 => :empty}
                },
                size: 4,

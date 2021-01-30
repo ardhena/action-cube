@@ -41,9 +41,10 @@
   .sidebar { width: 15%; }
   .board { width: 85%; }
 
-  table {  margin: auto; border-collapse: collapse; border-spacing: 0px; }
+  table {  margin: auto; border-spacing: 0px; }
   td { width: 20px; height: 20px; }
-  td.empty, td.empty-blink { background-color: $green; border: 1px solid $pink; }
-  td.snake { background-color: $pink-light; border: 1px solid $pink; }
-  td.snake-blink { background-color: $green-light; border: 1px solid $pink; }
+  td.empty, td.empty { background-color: $grey-light; border: 1px solid $white; }
+  td.snake_head { background-color: $pink-light; border: 1px solid $pink; }
+  td.snake { background-color: $green-light; border: 1px solid $green; }
+  td.treat { background-color: $grey-light; border: 1px solid $pink-light; }
 }
