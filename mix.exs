@@ -43,8 +43,7 @@ defmodule GameOfLife.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.14.0"},
       {:phoenix_live_dashboard, "~> 0.1"},
-      {:floki, ">= 0.0.0", only: :test},
-      {:distillery, "~> 2.1.0"}
+      {:floki, ">= 0.0.0", only: :test}
     ]
   end
 end
