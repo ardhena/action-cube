@@ -12,53 +12,44 @@ defmodule ActionCubeWeb.SnakeLiveTest do
     assert render(live_view) =~
              "<div class=\"snake-content\" phx-window-keyup=\"change_direction\">"
 
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-15\"></td>"
-    assert render(live_view) =~ "Game is running"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
+    assert render(live_view) =~ "Game is running."
+    assert render(live_view) =~ "Score: 0"
   end
 
-  test "processes tick when message is received", %{conn: conn} do
+  test "processes subtick and tick when message is received", %{conn: conn} do
     {:ok, live_view, _} = live(conn, "/snake")
 
-    send(live_view.pid, "tick")
+    send_subtick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"15-15\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"14-15\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
+
+    send_subtick(live_view, 4)
+
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-10\"></td>"
   end
 
   test "ends game when snake goes into wall", %{conn: conn} do
     {:ok, live_view, _} = live(conn, "/snake")
 
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-15\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
 
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
+    send_tick(live_view, 5)
 
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-15\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"5-10\"></td>"
 
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
+    send_tick(live_view, 5)
 
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"5-15\"></td>"
-
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-    send(live_view.pid, "tick")
-
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"0-15\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"0-10\"></td>"
     assert render(live_view) =~ "Game is running"
 
     # end of game
-    send(live_view.pid, "tick")
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"0-15\"></td>"
-    assert render(live_view) =~ "Game is over"
+    send_tick(live_view, 1)
+
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"0-10\"></td>"
+    assert render(live_view) =~ "Game over. You lost."
+    assert render(live_view) =~ "Score: 0"
   end
 
   test "changes snake direction on key press (wsad)", %{conn: conn} do
@@ -66,31 +57,31 @@ defmodule ActionCubeWeb.SnakeLiveTest do
 
     # left a
     render_keyup(live_view, "change_direction", %{"key" => "a"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"15-15\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-14\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-9\"></td>"
 
     # up w
     render_keyup(live_view, "change_direction", %{"key" => "w"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"15-14\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"14-14\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-9\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-9\"></td>"
 
     # right d
     render_keyup(live_view, "change_direction", %{"key" => "d"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"14-14\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"14-15\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"9-9\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-10\"></td>"
 
     # down s
     render_keyup(live_view, "change_direction", %{"key" => "s"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"14-15\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-15\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"9-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
   end
 
   test "changes snake direction on key press (arrows)", %{conn: conn} do
@@ -98,30 +89,45 @@ defmodule ActionCubeWeb.SnakeLiveTest do
 
     # left arrow
     render_keyup(live_view, "change_direction", %{"key" => "ArrowLeft"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"15-15\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-14\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-9\"></td>"
 
     # up arrow
     render_keyup(live_view, "change_direction", %{"key" => "ArrowUp"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"15-14\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"14-14\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-9\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-9\"></td>"
 
     # right arrow
     render_keyup(live_view, "change_direction", %{"key" => "ArrowRight"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"14-14\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"14-15\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"9-9\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-10\"></td>"
 
     # down arrow
     render_keyup(live_view, "change_direction", %{"key" => "ArrowDown"})
-    send(live_view.pid, "tick")
+    send_tick(live_view, 1)
 
-    assert render(live_view) =~ "<td class=\"empty\" id=\"14-15\"></td>"
-    assert render(live_view) =~ "<td class=\"snake_head\" id=\"15-15\"></td>"
+    assert render(live_view) =~ "<td class=\"empty\" id=\"9-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
   end
+
+  test "restarts game with button when lost", %{conn: conn} do
+    {:ok, live_view, _} = live(conn, "/snake")
+
+    send_tick(live_view, 11)
+    assert render(live_view) =~ "Game over. You lost."
+
+    render_click(live_view, "restart", %{})
+    assert render(live_view) =~ "Game is running."
+  end
+
+  defp send_tick(live_view, number), do: send_subtick(live_view, number * 5)
+
+  defp send_subtick(live_view, number),
+    do: 0..number |> Enum.each(fn _ -> send(live_view.pid, "tick") end)
 end

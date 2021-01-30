@@ -61,7 +61,8 @@ defmodule ActionCube.Snake.Board do
       ) do
     {x, y} = new_head_coords = increase_coords(direction, head_coords)
 
-    case coords_outside_board?(new_head_coords, size) || snake_eating_itself?(new_head_coords, snake_coords) do
+    case coords_outside_board?(new_head_coords, size) ||
+           snake_eating_itself?(new_head_coords, snake_coords) do
       true ->
         {:stop, board}
 

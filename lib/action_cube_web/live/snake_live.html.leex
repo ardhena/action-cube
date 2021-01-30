@@ -2,15 +2,23 @@
 
 <div class="snake-content" phx-window-keyup="change_direction">
   <div class="sidebar">
-    <p>Game is <%= if @game_running, do: "running", else: "over" %></p>
+    <h2>Score: <%= @gameplay.score %></h2>
+
+    <%= if @game_running do %>
+      <p>Game is running.</p>
+      <p>Move using WSAD keys or arrow keys.</p>
+    <% else %>
+      <p>Game over. You lost.</p>
+      <button phx-click="restart" class="btn">Restart game</button><br/>
+    <% end %>
   </div>
 
   <div class="board">
     <table>
-      <%= 0..(@board.size-1) |> Enum.map(fn i -> %>
+      <%= 0..(@gameplay.board.size-1) |> Enum.map(fn i -> %>
         <tr>
-          <%= 0..(@board.size-1) |> Enum.map(fn j -> %>
-            <td class="<%= @board.content[i][j] %>" id="<%= "#{i}-#{j}" %>"></td>
+          <%= 0..(@gameplay.board.size-1) |> Enum.map(fn j -> %>
+            <td class="<%= @gameplay.board.content[i][j] %>" id="<%= "#{i}-#{j}" %>"></td>
           <% end) %>
         </tr>
       <% end) %>
