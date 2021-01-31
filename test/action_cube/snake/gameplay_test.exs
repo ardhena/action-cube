@@ -2,14 +2,14 @@ defmodule ActionCube.Snake.GameplayTest do
   use ExUnit.Case
   alias ActionCube.Snake.{Board, Gameplay}
 
-  describe "start/1" do
+  describe "start/2" do
     test "creates board" do
       assert %Gameplay{
                tick_number: 0,
                subtick_number: 0,
                score: 0,
                board: %Board{size: 5, content: _content}
-             } = Gameplay.start(5)
+             } = Gameplay.start(5, 1)
     end
   end
 

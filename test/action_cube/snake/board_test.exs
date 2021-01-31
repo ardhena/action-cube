@@ -2,7 +2,7 @@ defmodule ActionCube.Snake.BoardTest do
   use ExUnit.Case
   alias ActionCube.Snake.Board
 
-  describe "start/1" do
+  describe "start/2" do
     test "builds an initial board" do
       board = Board.start(2)
 
@@ -23,6 +23,18 @@ defmodule ActionCube.Snake.BoardTest do
       assert [:empty, :empty] =
                (Map.values(board.content[0]) ++ Map.values(board.content[1]))
                |> Enum.filter(&(&1 == :empty))
+    end
+
+    test "builds an initial board with more treats" do
+      assert %Board{
+               content: %{
+                 0 => %{0 => :treat, 1 => :treat},
+                 1 => %{0 => :treat, 1 => :snake_head}
+               },
+               size: 2,
+               snake_direction: :up,
+               snake_head_coords: {1, 1}
+             } = Board.start(2, 3)
     end
   end
 

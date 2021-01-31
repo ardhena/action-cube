@@ -1,11 +1,9 @@
 defmodule ActionCube.Snake.Board do
   defstruct [:size, :content, :snake_direction, :snake_head_coords, :snake_coords]
 
-  def start(size) do
-    size
-    |> new()
-    |> spawn_snake()
-    |> spawn_treat()
+  def start(size, treat_number \\ 1) do
+    board = size |> new() |> spawn_snake()
+    Enum.reduce((1..treat_number), board, fn _, board -> spawn_treat(board) end)
   end
 
   @doc """
@@ -45,7 +43,7 @@ defmodule ActionCube.Snake.Board do
       :empty ->
         %__MODULE__{board | content: content |> toggle_cell({x, y}, :treat)}
 
-      value when value in [:snake, :snake_head] ->
+      value when value in [:snake, :snake_head, :treat] ->
         spawn_treat(board)
     end
   end

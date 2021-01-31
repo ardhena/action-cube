@@ -6,9 +6,9 @@ defmodule ActionCube.Snake.Gameplay do
   @doc """
   Starts game
   """
-  def start(board_size) do
+  def start(board_size, treat_number) do
     %__MODULE__{
-      board: board_size |> Board.start(),
+      board: Board.start(board_size, treat_number),
       tick_number: 0,
       subtick_number: 0,
       score: 0
