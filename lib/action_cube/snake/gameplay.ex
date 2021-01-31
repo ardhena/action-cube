@@ -15,6 +15,12 @@ defmodule ActionCube.Snake.Gameplay do
     }
   end
 
+  def check_tick(%__MODULE__{subtick_number: subtick_number}, speed)
+      when subtick_number + 1 >= speed,
+      do: :tick
+
+  def check_tick(%__MODULE__{}, _speed), do: :subtick
+
   @doc """
   Processes tick according to given game speed. Game speed is number of subticks needed to change the tick.
   """

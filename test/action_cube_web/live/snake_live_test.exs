@@ -10,7 +10,7 @@ defmodule ActionCubeWeb.SnakeLiveTest do
     assert render(live_view) =~ "<h1>Snake</h1>"
 
     assert render(live_view) =~
-             "<div class=\"snake-content\" phx-window-keyup=\"change_direction\">"
+             "<div class=\"snake-content\" phx-window-keydown=\"change_direction\">"
 
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
     assert render(live_view) =~ "Game is running."
@@ -56,28 +56,28 @@ defmodule ActionCubeWeb.SnakeLiveTest do
     {:ok, live_view, _} = live(conn, "/snake")
 
     # left a
-    render_keyup(live_view, "change_direction", %{"key" => "a"})
+    render_keydown(live_view, "change_direction", %{"key" => "a"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-9\"></td>"
 
     # up w
-    render_keyup(live_view, "change_direction", %{"key" => "w"})
+    render_keydown(live_view, "change_direction", %{"key" => "w"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"10-9\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-9\"></td>"
 
     # right d
-    render_keyup(live_view, "change_direction", %{"key" => "d"})
+    render_keydown(live_view, "change_direction", %{"key" => "d"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"9-9\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-10\"></td>"
 
     # down s
-    render_keyup(live_view, "change_direction", %{"key" => "s"})
+    render_keydown(live_view, "change_direction", %{"key" => "s"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"9-10\"></td>"
@@ -88,32 +88,44 @@ defmodule ActionCubeWeb.SnakeLiveTest do
     {:ok, live_view, _} = live(conn, "/snake")
 
     # left arrow
-    render_keyup(live_view, "change_direction", %{"key" => "ArrowLeft"})
+    render_keydown(live_view, "change_direction", %{"key" => "ArrowLeft"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-9\"></td>"
 
     # up arrow
-    render_keyup(live_view, "change_direction", %{"key" => "ArrowUp"})
+    render_keydown(live_view, "change_direction", %{"key" => "ArrowUp"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"10-9\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-9\"></td>"
 
     # right arrow
-    render_keyup(live_view, "change_direction", %{"key" => "ArrowRight"})
+    render_keydown(live_view, "change_direction", %{"key" => "ArrowRight"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"9-9\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"9-10\"></td>"
 
     # down arrow
-    render_keyup(live_view, "change_direction", %{"key" => "ArrowDown"})
+    render_keydown(live_view, "change_direction", %{"key" => "ArrowDown"})
     send_tick(live_view, 1)
 
     assert render(live_view) =~ "<td class=\"empty\" id=\"9-10\"></td>"
     assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-10\"></td>"
+  end
+
+  test "doesn't allow to change direction twice in one tick", %{conn: conn} do
+    {:ok, live_view, _} = live(conn, "/snake")
+
+    render_keydown(live_view, "change_direction", %{"key" => "a"})
+    send_subtick(live_view, 1)
+    render_keydown(live_view, "change_direction", %{"key" => "s"})
+    send_tick(live_view, 1)
+
+    assert render(live_view) =~ "<td class=\"empty\" id=\"10-10\"></td>"
+    assert render(live_view) =~ "<td class=\"snake_head\" id=\"10-9\"></td>"
   end
 
   test "restarts game with button when lost", %{conn: conn} do
